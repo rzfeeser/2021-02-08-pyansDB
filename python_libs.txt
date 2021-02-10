@@ -1,0 +1,6 @@
+# list of python libraries
+requests
+cx_Oracle
+os
+shutil
+urllib.request

@@ -1,0 +1,33 @@
+---
+- name: Query ISS api with Ansible
+  hosts: localhost
+  gather_facts: no     # set to true by default, runs the "setup" module
+  connection: local  
+    
+  tasks:
+  - name: Print out to the screen
+    register: astrojson
+    uri:
+      url: http://api.open-notify.org/astros.json
+      method: GET
+
+  - name: combine our Ansible and Python skills
+    debug:
+            var: astrojson.keys()
+                              
+  - name: Display the contents of the variable astrojson
+    debug:
+      var: astrojson.json.number
+      verbosity: 1
+
+  - name: Display the astros on the iss
+    debug:
+      var: astrojson.json.people
+      verbosity: 1
+
+
+  - name: (example-- now i want to HTTP POST list of astros someplace)
+    uri:
+      url: http://some.internal.url/path/to/some/service/
+      method: POST
+      attachment: "{{ astrojson.json.people }}"

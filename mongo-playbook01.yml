@@ -1,0 +1,12 @@
+---
+- name: Playbook for working with MongoDB
+  hosts: localhost
+  connection: local
+
+  tasks:
+  - name: Create 'burgers' database user with name 'bob'
+    community.mongodb.mongodb_user:
+      database: burgers
+      name: admin
+      #password: 12345
+      state: present

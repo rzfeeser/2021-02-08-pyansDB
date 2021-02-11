@@ -1,0 +1,114 @@
+---
+- name: Setup apache2 server
+  hosts: fry
+  gather_facts: yes
+  become: yes
+
+  tasks:
+  # this is like a python 'try'
+  - name: PRECHECK BLOCK
+    block:
+            - name: Ensure we are running against an UBUNTU system!!
+              fail:
+                      msg: "You are NOT on an approved OS"
+              when: ansible_distribution != "Ubuntu"
+
+
+
+  # this is like a python 'try'
+  - name: CHANGE BLOCK (this is the point of the playbook)
+    block:
+
+            - name: Install apache2 server and ensure pip is installed
+              apt:
+                      name:
+                              - apache2
+                              - python3-pip
+                      state: present
+
+            - name: Move configuration block to secure the file
+              blockinfile:
+                      insertafter: EOF
+                      path: /etc/apache2/apache2.conf
+                      block: |
+                              Alias /admin /var/www/html/admin
+
+                              <Directory /var/www/html/admin>
+                                <Files secure.txt>
+                                  AuthType basic
+                                  AuthName "Secured Files area"
+                                  AuthUserFile /etc/apache2/.htpasswd
+                                  Require user sammy
+                                </Files>
+                                order allow,deny
+                                deny from all
+                                satisfy any
+                              </Directory>
+
+            - name: create the admin/ folder
+              file:
+                      state: directory
+                      path: /var/www/html/admin/
+
+            - name: create a protected file we can download
+              copy:
+                      content: "This is a super secret file!\nIf you can read it, you hacked the gibson!"
+                      dest: /var/www/html/admin/secure.txt
+                      mode: u=rw,g=r,o=r
+
+            - name: trigger a faux false
+              shell: /bin/false
+
+            # required for htpasswd to be controlled by python3
+            - name: install passlib
+              pip:
+                      name: passlib
+                      state: present
+
+            # Apache webserver uses htpasswd to make passwords, it so happens ansible has a module to
+            # edit this password file. In production, passwords should always be encrypted with vault!
+            - name: set a password via htpasswd
+              htpasswd:
+                      path: /etc/apache2/.htpasswd
+                      name: sammy
+                      password: larry
+                      owner: root
+                      group: root
+
+                      #  - name: restart service
+                      #    shell: "/etc/init.d/apache2 restart"
+
+            - name: service restart
+              service:
+                      name: apache2
+                      state: restarted
+    
+    rescue:
+            - name: Rollback TRIGGERED!
+              debug:
+                      msg: "ROLLBACK ROUTINE TRIGGERED! UNDOING WORK...."
+
+            - name: UN-Install apache2 server and ensure pip is installed
+              apt:
+                      name:
+                              - apache2
+                      state: absent
+
+            - name: create the admin/ folder
+              file:
+                      state: absent
+                      path: /var/www/html/admin/
+
+            - name: REMOVE USER AND password via htpasswd
+              htpasswd:
+                      path: /etc/apache2/.htpasswd
+                      name: sammy
+                      password: larry
+                      owner: root
+                      group: root
+                      state: absent
+
+            - name: absent passlib
+              pip:
+                      name: passlib
+                      state: absent

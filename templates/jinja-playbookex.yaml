@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  connection: local
+  
+  vars:
+    vlan_id: 998    # this is read as an integer
+    vlan_name: Ansible_VLAN   # read in as a string
+    
+  tasks:
+    - name: Provision VLAN
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ query('sequence', 'start=1 end='+vlan_id|string)|list }}"

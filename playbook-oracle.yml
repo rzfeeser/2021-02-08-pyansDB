@@ -1,0 +1,21 @@
+- hosts: localhost
+  vars:
+    oraclehost: 10.5.19.206
+    oracleport: 51521
+    oracleservice: XEPDB1   #orcl
+    oracleuser: system
+    oraclepassword: mysecurepassword
+    oracle_env:
+      ORACLE_HOME: /home/student/oracle/instantclient_21_1/
+      LD_LIBRARY_PATH: /home/student/oracle/instantclient_21_1/
+  tasks:
+    - name: gather database facts
+      oracle_facts:
+        hostname: "{{ oraclehost }}"
+        port: "{{ oracleport }}"
+        service_name: "{{ oracleservice }}"
+        user: "{{ oracleuser }}"
+        password: "{{ oraclepassword }}"
+      register: dbfacts
+    - debug:
+        var: dbfacts

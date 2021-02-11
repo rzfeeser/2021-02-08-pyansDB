@@ -20,3 +20,5 @@ https://tools.ietf.org/html/rfc7231
 
 # python cx_oracle library
 https://pypi.org/project/cx-Oracle/
+
+https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html

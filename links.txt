@@ -1,3 +1,22 @@
 links:
 
+# ansible var precedence
+https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#understanding-variable-precedence
+
+# flask-limiter (limiting requests in flask)
 https://flask-limiter.readthedocs.io/en/stable/
+
+# ansible keywords
+https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html
+
+# uri whitepaper (how APIs are defined)
+https://tools.ietf.org/html/rfc3986
+
+# REST whitepaper
+https://roy.gbiv.com/pubs/dissertation/rest_arch_style.htm
+
+# IETF HTTP whitepaper
+https://tools.ietf.org/html/rfc7231
+
+# python cx_oracle library
+https://pypi.org/project/cx-Oracle/

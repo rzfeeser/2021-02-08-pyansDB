@@ -1,6 +1,24 @@
 # list of python libraries
-requests
-cx_Oracle
-os
-shutil
-urllib.request
+
+Python pip installs
+-------------------
+requests - make http requests
+    python3 -m pip install requests
+
+cx_Oracle - interact with oracle db
+    python3 -m pip install cx_Oracle
+    
+yaml - working with data to/from yaml # use `import yaml` in your code
+                                      # NOT `import pyyaml`
+    python3 -m pip install pyyaml
+
+
+
+
+Python std libraries (no pip install here)
+------------------------------------------
+os - low level os commands
+shutil - higher level shell commands
+urllib.request - for http requests
+json - working with data to/from json
+

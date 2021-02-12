@@ -1,0 +1,4 @@
+---
+oracle_env:
+  ORACLE_HOME: /home/student/oracle/instantclient_21_1/
+  LD_LIBRARY_PATH: /home/student/oracle/instantclient_21_1/

@@ -1,0 +1,28 @@
+---
+- name: Push a script and run it
+  hosts: localhost
+  connection: local
+
+
+  tasks:
+
+  - name: create a directory
+    file:
+            state: directory
+            path: /home/student/exampledir/
+
+  - name: This task will only run if the file created by this script does not exist
+    script: /home/student/pyansDB/pyhello.py
+    args:
+      creates: /home/student/stopper.txt
+      executable: python3
+    register: results
+    run_once: true
+    delegate_to: localhost
+
+  - debug:
+      msg: "Here is what came back: {{ results }}"
+
+  - debug:
+      msg: "The output of the Python is {{ results.stdout | default('script did not run') }}"
+

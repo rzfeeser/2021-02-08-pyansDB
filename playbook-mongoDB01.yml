@@ -18,5 +18,17 @@
 
           - name: Display std result of our script
             debug:
-                    var: results.stdout
+                    var: results.stdout_lines
 
+          - name: pretty print what came back
+            debug:
+                    var: results.stdout | to_nice_json
+
+          - name: just the keys
+            debug:
+                    var: results.keys()
+
+          - name: copy out the results
+            copy:
+                    content: "{{ results.stdout }}"
+                    dest: /home/student/geteyeballsondata
